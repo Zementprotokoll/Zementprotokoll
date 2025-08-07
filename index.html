@@ -6,46 +6,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zementprotokoll</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f9f9f9;
+    }
+
+    h1, h2 {
+      margin-top: 1rem;
+    }
+
+    input, button {
+      padding: 0.6rem;
+      margin: 0.3rem 0;
+      font-size: 1rem;
+    }
+
+    form {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      background: #fff;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    th {
+      background-color: #e8e8e8;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    #loginError {
+      color: red;
+      margin-top: 0.5rem;
+    }
+  </style>
 </head>
 <body>
-  <div id="loginContainer">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Benutzername" />
-    <input type="password" id="password" placeholder="Passwort" />
-    <button onclick="login()">Login</button>
-    <p id="loginError" style="color:red; display:none;">Login fehlgeschlagen</p>
-  </div>
+  <div class="container">
+    <div id="loginContainer">
+      <h1>Zementprotokoll</h1>
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Benutzername" />
+      <input type="password" id="password" placeholder="Passwort" />
+      <button onclick="login()">Login</button>
+      <p id="loginError" style="display:none;">Login fehlgeschlagen</p>
+    </div>
 
-  <div id="appContainer" style="display:none;">
-    <h2>Zementprotokoll</h2>
-    <form id="entryForm">
-      <input type="text" id="pileNumber" placeholder="Pfahl-Nr." required />
-      <input type="date" id="date" required />
-      <input type="number" id="flushAmount" placeholder="Spülungsmenge" required />
-      <input type="number" id="pressAmount" placeholder="Verpressmenge" required />
-      <input type="number" id="pressure" placeholder="Druck (bar)" required />
-      <input type="number" id="siloRefill" placeholder="Silo-Befüllung (optional)" />
-      <button type="submit">Eintrag erstellen</button>
-    </form>
+    <div id="appContainer" style="display:none;">
+      <h1>Zementprotokoll</h1>
+      <h2>Neuer Eintrag</h2>
+      <form id="entryForm">
+        <label>Pfahl-Nr.: <input type="text" id="pileNumber" required /></label>
+        <label>Datum: <input type="date" id="date" required /></label>
+        <label>Spülungsmenge (l): <input type="number" id="flushAmount" required /></label>
+        <label>Verpressmenge (l): <input type="number" id="pressAmount" required /></label>
+        <label>Druck (bar): <input type="number" id="pressure" required /></label>
+        <label>Silo-Befüllung (optional): <input type="number" id="siloRefill" /></label>
+        <button type="submit">Eintrag erstellen</button>
+      </form>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Pfahl-Nr.</th>
-          <th>Datum</th>
-          <th>Verpressung</th>
-          <th>Spülung</th>
-          <th>Druck</th>
-          <th>Gesamt</th>
-          <th>Silo-Befüllung</th>
-          <th>Rest-Silo</th>
-          <th>Aktion</th>
-        </tr>
-      </thead>
-      <tbody id="logTable"></tbody>
-    </table>
+      <h2>Einträge</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Pfahl-Nr.</th>
+            <th>Datum</th>
+            <th>Verpressung</th>
+            <th>Spülung</th>
+            <th>Druck</th>
+            <th>Gesamt</th>
+            <th>Silo-Befüllung</th>
+            <th>Rest-Silo</th>
+            <th>Aktion</th>
+          </tr>
+        </thead>
+        <tbody id="logTable"></tbody>
+      </table>
 
-    <button onclick="logout()">Logout</button>
+      <button onclick="logout()">Logout</button>
+    </div>
   </div>
 
   <script src="script.js"></script>

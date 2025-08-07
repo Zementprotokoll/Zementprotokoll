@@ -3,108 +3,109 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Zementprotokoll</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 2rem;
+      padding: 1rem;
       background-color: #f9f9f9;
+      max-width: 800px;
+      margin: auto;
     }
 
-    h1, h2 {
-      margin-top: 1rem;
-    }
-
-    input, button {
-      padding: 0.6rem;
-      margin: 0.3rem 0;
-      font-size: 1rem;
+    h2 {
+      text-align: center;
     }
 
     form {
-      margin-top: 1rem;
       margin-bottom: 2rem;
-      display: flex;
-      flex-direction: column;
-      max-width: 400px;
+    }
+
+    input, button {
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+      width: 100%;
+      max-width: 100%;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 2rem;
-      background: #fff;
+      margin-top: 1rem;
     }
 
     th, td {
       border: 1px solid #ccc;
-      padding: 0.5rem;
+      padding: 0.6rem;
       text-align: center;
     }
 
     th {
-      background-color: #e8e8e8;
+      background-color: #eaeaea;
     }
 
-    .container {
-      max-width: 900px;
-      margin: auto;
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
     }
 
-    #loginError {
-      color: red;
-      margin-top: 0.5rem;
+    .actions button {
+      flex: 1;
+      padding: 0.4rem;
     }
+
+    #logout {
+      margin-top: 2rem;
+      display: block;
+      text-align: center;
+    }
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <div id="loginContainer">
-      <h1>Zementprotokoll</h1>
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Benutzername" />
-      <input type="password" id="password" placeholder="Passwort" />
-      <button onclick="login()">Login</button>
-      <p id="loginError" style="display:none;">Login fehlgeschlagen</p>
-    </div>
+  <h2>Zementprotokoll</h2>
 
-    <div id="appContainer" style="display:none;">
-      <h1>Zementprotokoll</h1>
-      <h2>Neuer Eintrag</h2>
-      <form id="entryForm">
-        <label>Pfahl-Nr.: <input type="text" id="pileNumber" required /></label>
-        <label>Datum: <input type="date" id="date" required /></label>
-        <label>Spülungsmenge (l): <input type="number" id="flushAmount" required /></label>
-        <label>Verpressmenge (l): <input type="number" id="pressAmount" required /></label>
-        <label>Druck (bar): <input type="number" id="pressure" required /></label>
-        <label>Silo-Befüllung (optional): <input type="number" id="siloRefill" /></label>
-        <button type="submit">Eintrag erstellen</button>
-      </form>
+  <form id="entry-form">
+    <label for="datum">Datum:</label>
+    <input type="date" id="datum" name="datum" required />
 
-      <h2>Einträge</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Pfahl-Nr.</th>
-            <th>Datum</th>
-            <th>Verpressung</th>
-            <th>Spülung</th>
-            <th>Druck</th>
-            <th>Gesamt</th>
-            <th>Silo-Befüllung</th>
-            <th>Rest-Silo</th>
-            <th>Aktion</th>
-          </tr>
-        </thead>
-        <tbody id="logTable"></tbody>
-      </table>
+    <label for="spuelung">Spülung:</label>
+    <input type="number" id="spuelung" name="spuelung" required />
 
-      <button onclick="logout()">Logout</button>
-    </div>
+    <label for="verpressung">Verpressung:</label>
+    <input type="number" id="verpressung" name="verpressung" required />
+
+    <label for="druck">Druck (bar):</label>
+    <input type="number" id="druck" name="druck" required />
+
+    <label for="silo">Silo-Befüllung (optional):</label>
+    <input type="number" id="silo" name="silo" />
+
+    <button type="submit">Eintrag erstellen</button>
+  </form>
+
+  <h2>Einträge</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Spülung</th>
+        <th>Verpressung</th>
+        <th>Gesamt</th>
+        <th>Druck</th>
+        <th>Silo</th>
+        <th>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody id="entries-table-body">
+      <!-- Dynamische Inhalte -->
+    </tbody>
+  </table>
+
+  <div id="logout">
+    <button>Logout</button>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>

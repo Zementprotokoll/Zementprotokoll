@@ -3,49 +3,50 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zementprotokoll</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section id="login-section">
+  <div id="loginContainer">
     <h2>Login</h2>
-    <form id="login-form">
-      <input type="text" id="username" placeholder="Benutzername" required />
-      <input type="password" id="password" placeholder="Passwort" required />
-      <button type="submit">Login</button>
-      <p id="login-error" class="error"></p>
-    </form>
-  </section>
+    <input type="text" id="username" placeholder="Benutzername" />
+    <input type="password" id="password" placeholder="Passwort" />
+    <button onclick="login()">Login</button>
+    <p id="loginError" style="color:red; display:none;">Login fehlgeschlagen</p>
+  </div>
 
-  <section id="app-section" style="display: none;">
-    <h2>Neuer Eintrag</h2>
-    <form id="entry-form">
-      <input type="text" id="pfahl" placeholder="Pfahl-Nr." required />
-      <input type="date" id="datum" required />
-      <input type="number" id="spuelung" placeholder="Spülungsmenge (l)" required />
-      <input type="number" id="verpressung" placeholder="Verpressmenge (l)" required />
-      <input type="number" id="silo" placeholder="Silo-Befüllung (optional)" />
+  <div id="appContainer" style="display:none;">
+    <h2>Zementprotokoll</h2>
+    <form id="entryForm">
+      <input type="text" id="pileNumber" placeholder="Pfahl-Nr." required />
+      <input type="date" id="date" required />
+      <input type="number" id="flushAmount" placeholder="Spülungsmenge" required />
+      <input type="number" id="pressAmount" placeholder="Verpressmenge" required />
+      <input type="number" id="pressure" placeholder="Druck (bar)" required />
+      <input type="number" id="siloRefill" placeholder="Silo-Befüllung (optional)" />
       <button type="submit">Eintrag erstellen</button>
     </form>
 
-    <h3>Einträge</h3>
-    <table id="entry-table">
+    <table>
       <thead>
         <tr>
           <th>Pfahl-Nr.</th>
           <th>Datum</th>
-          <th>Spülung</th>
           <th>Verpressung</th>
+          <th>Spülung</th>
+          <th>Druck</th>
           <th>Gesamt</th>
-          <th>Rest-Silo</th>
           <th>Silo-Befüllung</th>
+          <th>Rest-Silo</th>
           <th>Aktion</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="logTable"></tbody>
     </table>
-  </section>
+
+    <button onclick="logout()">Logout</button>
+  </div>
 
   <script src="script.js"></script>
 </body>

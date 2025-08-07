@@ -74,37 +74,4 @@ document.addEventListener("DOMContentLoaded", () => {
       tableBody.removeChild(row);
     }
   });
-
-  const exportButton = document.getElementById("export-pdf");
-  if (exportButton) {
-    exportButton.addEventListener("click", () => {
-      if (typeof window.jspdf === "undefined" || typeof window.jspdf.autoTable === "undefined") {
-        alert("PDF-Export funktioniert nicht – jsPDF fehlt!");
-        return;
-      }
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      const table = document.getElementById("entry-table");
-      if (!table) {
-        alert("Keine Tabelle gefunden.");
-        return;
-      }
-
-      const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText);
-      const rows = Array.from(table.querySelectorAll("tbody tr")).map(tr =>
-        Array.from(tr.querySelectorAll("td")).map(td => td.innerText)
-      );
-
-      doc.text("Zementprotokoll – Einträge", 14, 16);
-      doc.autoTable({
-        startY: 20,
-        head: [headers],
-        body: rows,
-      });
-
-      doc.save("zementprotokoll.pdf");
-    });
-  }
 });

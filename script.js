@@ -1,77 +1,103 @@
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginSection = document.getElementById("login-section");
-  const appSection = document.getElementById("app-section");
-  const loginForm = document.getElementById("login-form");
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("password");
-  const loginError = document.getElementById("login-error");
+let entries = JSON.parse(localStorage.getItem("zementEntries")) || [];
+let restSilo = 0;
+let allowedUsers = ["David", "Michael", "Roman"];
 
-  const entryForm = document.getElementById("entry-form");
-  const pfahlInput = document.getElementById("pfahl");
-  const datumInput = document.getElementById("datum");
-  const spuelungInput = document.getElementById("spuelung");
-  const verpressungInput = document.getElementById("verpressung");
-  const siloInput = document.getElementById("silo");
-  const tableBody = document.querySelector("#entry-table tbody");
+window.onload = function() {
+    const user = localStorage.getItem("loggedInUser");
+    if (user && allowedUsers.includes(user)) {
+        showApp();
+    }
+}
 
-  let restSilo = 0;
-
-  const allowedUsers = ["David", "Michael", "Roman"];
-
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    if (allowedUsers.includes(username) && password === username) {
-      loginSection.style.display = "none";
-      appSection.style.display = "block";
-      loginError.textContent = "";
+function login() {
+    const user = document.getElementById("username").value;
+    const pw = document.getElementById("password").value;
+    if (allowedUsers.includes(user) && pw === user) {
+        localStorage.setItem("loggedInUser", user);
+        showApp();
     } else {
-      loginError.textContent = "Benutzername oder Passwort falsch.";
+        document.getElementById("loginError").style.display = "block";
     }
+}
 
-    usernameInput.value = "";
-    passwordInput.value = "";
-  });
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    location.reload();
+}
 
-  entryForm.addEventListener("submit", (e) => {
+function showApp() {
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+    recalculateRestSilo();
+    updateTable();
+}
+
+document.getElementById('entryForm')?.addEventListener('submit', function (e) {
     e.preventDefault();
-
-    const pfahl = pfahlInput.value.trim();
-    const datum = datumInput.value;
-    const spuelung = parseFloat(spuelungInput.value) || 0;
-    const verpressung = parseFloat(verpressungInput.value) || 0;
-    const silo = parseFloat(siloInput.value) || 0;
-    const gesamt = spuelung + verpressung;
-
-    restSilo = restSilo + silo - gesamt;
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${pfahl}</td>
-      <td>${datum}</td>
-      <td>${spuelung}</td>
-      <td>${verpressung}</td>
-      <td>${gesamt}</td>
-      <td>${restSilo}</td>
-      <td>${silo > 0 ? silo : ""}</td>
-      <td><button class="delete-btn">🗑</button></td>
-    `;
-    tableBody.appendChild(row);
-
-    pfahlInput.value = "";
-    datumInput.value = "";
-    spuelungInput.value = "";
-    verpressungInput.value = "";
-    siloInput.value = "";
-  });
-
-  tableBody.addEventListener("click", (e) => {
-    if (e.target.classList.contains("delete-btn")) {
-      const row = e.target.closest("tr");
-      tableBody.removeChild(row);
-    }
-  });
+    const pile = document.getElementById('pileNumber').value;
+    const date = document.getElementById('date').value;
+    const press = parseFloat(document.getElementById('pressAmount').value);
+    const flush = parseFloat(document.getElementById('flushAmount').value);
+    const pressure = parseFloat(document.getElementById('pressure').value);
+    const refill = parseFloat(document.getElementById('siloRefill').value) || 0;
+    const total = press + flush;
+    const createdAt = Date.now();
+    restSilo += refill - total;
+    entries.push({ pile, date, press, flush, pressure, total, refill, restSilo, createdAt });
+    saveAndRefresh();
+    this.reset();
 });
+
+function updateTable() {
+    const table = document.getElementById('logTable');
+    table.innerHTML = '';
+    [...entries].reverse().forEach((entry, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${entry.pile}</td>
+            <td>${entry.date}</td>
+            <td>${entry.press}</td>
+            <td>${entry.flush}</td>
+            <td>${entry.pressure}</td>
+            <td>${entry.total}</td>
+            <td>${entry.refill}</td>
+            <td>${entry.restSilo.toFixed(2)}</td>
+            <td>
+                <button onclick="editEntry(${index})">Bearbeiten</button>
+                <button onclick="deleteEntry(${index})">Löschen</button>
+            </td>
+        `;
+        table.appendChild(row);
+    });
+}
+
+function deleteEntry(index) {
+    entries.splice(index, 1);
+    saveAndRefresh();
+}
+
+function editEntry(index) {
+    const entry = entries[index];
+    document.getElementById('pileNumber').value = entry.pile;
+    document.getElementById('date').value = entry.date;
+    document.getElementById('pressAmount').value = entry.press;
+    document.getElementById('flushAmount').value = entry.flush;
+    document.getElementById('pressure').value = entry.pressure;
+    document.getElementById('siloRefill').value = entry.refill;
+    deleteEntry(index);
+}
+
+function recalculateRestSilo() {
+    restSilo = 0;
+    entries.forEach(e => {
+        restSilo += e.refill - e.total;
+        e.restSilo = restSilo;
+    });
+}
+
+function saveAndRefresh() {
+    recalculateRestSilo();
+    localStorage.setItem("zementEntries", JSON.stringify(entries));
+    updateTable();
+}

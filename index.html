@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Zementprotokoll – Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div id="loginContainer">
+        <h2>Zementprotokoll Login</h2>
+        <input type="text" id="username" placeholder="Benutzername">
+        <input type="password" id="password" placeholder="Passwort">
+        <button onclick="login()">Login</button>
+        <p id="loginError" style="color:red; display:none;">Falscher Benutzername oder Passwort</p>
+    </div>
+
+    <div id="appContainer" style="display:none;">
+        <h1>Zementprotokoll</h1>
+        <button onclick="logout()">Abmelden</button>
+        <form id="entryForm">
+            <input type="text" id="pileNumber" placeholder="Pfahlnummer" required>
+            <input type="date" id="date" required>
+            <input type="number" id="pressAmount" placeholder="Verpressmenge (kg)" required>
+            <input type="number" id="flushAmount" placeholder="Spülungsmenge (kg)" required>
+            <input type="number" id="pressure" placeholder="Druck (bar)" required>
+            <input type="number" id="siloRefill" placeholder="Silo Befüllung (kg)">
+            <button type="submit">Eintrag hinzufügen</button>
+        </form>
+
+        <div style="margin-top: 15px;">
+            <button onclick="toggleOldEntries(true)">Alte Beiträge verstecken</button>
+            <button onclick="toggleOldEntries(false)">Alle anzeigen</button>
+            <button onclick="generatePDF(true)">Bericht (nur neue Einträge)</button>
+            <button onclick="generatePDF(false)">Bericht (alle Einträge)</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Pfahl</th>
+                    <th>Datum</th>
+                    <th>Verpress</th>
+                    <th>Spülung</th>
+                    <th>Druck</th>
+                    <th>Menge gesamt</th>
+                    <th>Silo Befüllung</th>
+                    <th>Rest Silo</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody id="logTable"></tbody>
+        </table>
+    </div>
+</body>
+</html>
